@@ -1,7 +1,7 @@
 plugins {
     id 'application'
     id 'checkstyle'
-    id 'com.adarshr.test-logger' version '3.1.0'
+    id 'com.adarshr.test-logger' version '3.2.0'
     id 'se.patrikerdes.use-latest-versions' version '0.2.18'
     id 'com.github.ben-manes.versions' version '0.42.0'
     id 'net.ltgt.errorprone' version '2.0.2'
@@ -16,6 +16,7 @@ repositories {
 
 compileJava {
     options.release = 16
+    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
 }
 
 application {
@@ -24,16 +25,17 @@ application {
 
 dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'info.picocli:picocli:4.6.3'
 
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0-RC1'
 
     testImplementation(
-            'org.junit.jupiter:junit-jupiter-params:5.8.2',
-            'org.slf4j:slf4j-log4j12:2.0.0-alpha6',
-            'org.assertj:assertj-core:3.22.0'
+            'org.junit.jupiter:junit-jupiter-params:5.9.0-RC1',
+            'org.slf4j:slf4j-log4j12:2.0.0-alpha7',
+            'org.assertj:assertj-core:3.23.1'
     )
 
-    errorprone 'com.google.errorprone:error_prone_core:2.11.0'
+    errorprone 'com.google.errorprone:error_prone_core:2.14.0'
 }
 
 test {

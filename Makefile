@@ -13,7 +13,7 @@ install:
 	./gradlew clean install
 
 run-dist:
-	./app/build/install/app/bin/app
+	./build/install/app/bin/app
 
 check-updates:
 	./gradlew dependencyUpdates
@@ -28,3 +28,6 @@ build-run: build run
 
 run:
 	./gradlew run --console=plain
+
+gradle-build-refresh:
+	gradle build --refresh-dependencies
