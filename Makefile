@@ -1,8 +1,5 @@
 .DEFAULT_GOAL := build-run
 
-setup:
-	gradle wrapper --gradle-version 7.3.3
-
 clean:
 	./gradlew clean
 
@@ -13,21 +10,24 @@ install:
 	./gradlew clean install
 
 run-dist:
-	./build/install/app/bin/app
+	./build/install/java-package/bin/java-package
 
-check-updates:
-	./gradlew dependencyUpdates
+run:
+	./gradlew run
+
+test:
+	./gradlew test
+
+report:
+	./gradlew jacocoTestReport
+
+lint:
+	./gradlew checkstyleMain checkstyleTest
 
 update-deps:
 	./gradlew useLatestVersions
 
-lint:
-	./gradlew checkstyleMain
 
 build-run: build run
 
-run:
-	./gradlew run --console=plain
-
-gradle-build-refresh:
-	gradle build --refresh-dependencies
+.PHONY: build
