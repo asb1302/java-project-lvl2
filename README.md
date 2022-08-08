@@ -3,6 +3,14 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/46c8e5befa572cd9bf5e/maintainability)](https://codeclimate.com/github/asb1302/java-project-lvl2/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/46c8e5befa572cd9bf5e/test_coverage)](https://codeclimate.com/github/asb1302/java-project-lvl2/test_coverage)
 
+### Differ demo
+
+#### Flat json:
+  <img src="https://asciinema.org/a/SuP11vXAyiwkQHNTVCl1ZHtq6.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
+
+#### Flat yaml:
+  <img src="https://asciinema.org/a/40QomsQ5jmnDsoTkGGScYVd9i.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
+
 ## Start
 
 ```sh
