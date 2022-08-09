@@ -3,81 +3,132 @@ package hexlet.code;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//CHECKSTYLE:OFF: checkstyle:magicnumber
 class DifferTest {
-
-    private static String filepath1;
-    private static String filepath2;
-
-    private static String filepath3;
-    private static String filepath4;
-
-    private static String getFixturePath(String fileName) {
-        return Paths.get("src", "test", "resources", "fixtures", fileName).toAbsolutePath().toString();
-    }
-
+    private static Differ differ;
     @BeforeAll
     public static void beforeAll() {
-        filepath1 = getFixturePath("file1.json");
-        filepath2 = getFixturePath("file2.json");
-        filepath3 = getFixturePath("file3.yaml");
-        filepath4 = getFixturePath("file4.yaml");
+        differ = new Differ();
     }
 
     @Test
-    void testGenerateFlatJson() throws Throwable {
-        String result1 = new Differ().generate(filepath1, filepath2, "json");
-        String expected1 = """
-                {
-                 - follow: false
-                   host: hexlet.io
-                 - proxy: 123.234.53.22
-                 - timeout: 50
-                 + timeout: 20
-                 + verbose: true
-                }""";
-        assertThat(result1).isEqualTo(expected1);
+    void testGenerateSimpleValues() {
+        Map<String, Object> map1 = Map.of(
+                "key1", "value1",
+                "key2", "value2",
+                "key3", "value3",
+                "key4", "deletedValue4",
+                "key6", 123
+        );
 
-        String result2 = new Differ().generate(filepath2, filepath1, "json");
-        String expected2 = """
-                {
-                 + follow: false
-                   host: hexlet.io
-                 + proxy: 123.234.53.22
-                 - timeout: 20
-                 + timeout: 50
-                 - verbose: true
-                }""";
-        assertThat(result2).isEqualTo(expected2);
+        Map<String, Object> map2 = Map.of(
+                "key1", "value1",
+                "key2", "value2changed",
+                "key3", false,
+                "key5", "newValue5",
+                "key6", 345
+        );
+
+        Map<String, Map<String, Object>> expected = new LinkedHashMap<>(Map.of(
+                "key1", Map.of(Differ.OLD_VALUE_KEY, "value1", Differ.NEW_VALUE_KEY, "value1"),
+                "key2", Map.of(Differ.OLD_VALUE_KEY, "value2", Differ.NEW_VALUE_KEY, "value2changed"),
+                "key3", Map.of(Differ.OLD_VALUE_KEY, "value3", Differ.NEW_VALUE_KEY, false),
+                "key4", Map.of(Differ.OLD_VALUE_KEY, "deletedValue4"),
+                "key5", Map.of(Differ.NEW_VALUE_KEY, "newValue5"),
+                "key6", Map.of(Differ.OLD_VALUE_KEY, 123, Differ.NEW_VALUE_KEY, 345)
+        ));
+
+        Map<String, Map<String, Object>> result = differ.generate(map1, map2);
+
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
-    void testGenerateFlatYaml() throws Throwable {
-        String result1 = new Differ().generate(filepath3, filepath4, "yaml");
-        String expected1 = """
-                {
-                 - follow: false
-                   host: hexlet.io
-                 - proxy: 123.234.53.22
-                 - timeout: 50
-                 + timeout: 20
-                 + verbose: true
-                }""";
-        assertThat(result1).isEqualTo(expected1);
+    void testGenerateNestedValues() {
+        Map<String, Object> map1 = Map.of(
+                "key2", Arrays.asList(1, 2, 3)
+        );
 
-        String result2 = new Differ().generate(filepath4, filepath3, "yaml");
-        String expected2 = """
-                {
-                 + follow: false
-                   host: hexlet.io
-                 + proxy: 123.234.53.22
-                 - timeout: 20
-                 + timeout: 50
-                 - verbose: true
-                }""";
-        assertThat(result2).isEqualTo(expected2);
+        Map<String, Object> map2 = Map.of(
+                "key1", Map.of("nestedKey", "value", "isNested", true),
+                "key2", Arrays.asList(3, 4, 5)
+        );
+
+        Map<String, Map<String, Object>> expected = new HashMap<>(Map.of(
+                "key1", Map.of(Differ.NEW_VALUE_KEY, Map.of("nestedKey", "value", "isNested", true)),
+                "key2", Map.of(Differ.OLD_VALUE_KEY, Arrays.asList(1, 2, 3),
+                        Differ.NEW_VALUE_KEY, Arrays.asList(3, 4, 5))
+        ));
+
+        Map<String, Map<String, Object>> result = differ.generate(map1, map2);
+
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void testGenerateNullValues() {
+        Map<String, Object> map1 = new LinkedHashMap<>();
+        map1.put("key1", null);
+        map1.put("key2", null);
+        map1.put("key3", "value3");
+
+        Map<String, Object> map2 = new LinkedHashMap<>();
+        map2.put("key1", 123);
+        map2.put("key2", null);
+        map2.put("key3", null);
+
+        Map<String, Map<String, Object>> expected = new LinkedHashMap<>();
+
+        Map<String, Object> value1 = new HashMap<>();
+        value1.put(Differ.OLD_VALUE_KEY, null);
+        value1.put(Differ.NEW_VALUE_KEY, 123);
+
+        Map<String, Object> value2 = new HashMap<>();
+        value2.put(Differ.OLD_VALUE_KEY, null);
+        value2.put(Differ.NEW_VALUE_KEY, null);
+
+        Map<String, Object> value3 = new HashMap<>();
+        value3.put(Differ.OLD_VALUE_KEY, "value3");
+        value3.put(Differ.NEW_VALUE_KEY, null);
+
+        expected.put("key1", value1);
+        expected.put("key2", value2);
+        expected.put("key3", value3);
+
+        Map<String, Map<String, Object>> result = differ.generate(map1, map2);
+
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void testGenerateCheckOrder() {
+        Map<String, Object> map1 = Map.of(
+                "lastKey1", "value1",
+                "middleKey", "value2",
+                "firstKey1", "value3"
+        );
+
+        Map<String, Object> map2 = Map.of(
+                "lastKey1", "value1",
+                "middleKey", "value2",
+                "firstKey1", "value3"
+        );
+
+        Map<String, Map<String, Object>> expected = new LinkedHashMap<>(Map.of(
+                "firstKey1", Map.of(Differ.OLD_VALUE_KEY, "value3", Differ.NEW_VALUE_KEY, "value3"),
+                "middleKey", Map.of(Differ.OLD_VALUE_KEY, "value2", Differ.NEW_VALUE_KEY, "value2"),
+                "lastKey1", Map.of(Differ.OLD_VALUE_KEY, "value1", Differ.NEW_VALUE_KEY, "value1")
+        ));
+
+        Map<String, Map<String, Object>> result = differ.generate(map1, map2);
+
+        assertThat(result).isEqualTo(expected);
     }
 }

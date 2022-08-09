@@ -6,10 +6,16 @@
 ### Differ demo
 
 #### Flat json:
-  <img src="https://asciinema.org/a/SuP11vXAyiwkQHNTVCl1ZHtq6.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
+  <img src="https://asciinema.org/a/ErRpZd35Q4xMF0n8orPiAE7xA.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
 
 #### Flat yaml:
-  <img src="https://asciinema.org/a/40QomsQ5jmnDsoTkGGScYVd9i.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
+  <img src="https://asciinema.org/a/16oCVkOkH9mgPYnT8iss42UMn.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
+
+### Nested json:
+  <img src="https://asciinema.org/a/jdshPbhW3Zvo75vp4Mv2StU8M.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
+
+### Nested yaml:
+  <img src="https://asciinema.org/a/2swVruxgRLVQVYEmo180npiJz.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
 
 ## Start
 
