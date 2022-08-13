@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -36,16 +35,20 @@ class DifferTest {
                 "key6", 345
         );
 
-        Map<String, Map<String, Object>> expected = new LinkedHashMap<>(Map.of(
-                "key1", Map.of(Differ.OLD_VALUE_KEY, "value1", Differ.NEW_VALUE_KEY, "value1"),
-                "key2", Map.of(Differ.OLD_VALUE_KEY, "value2", Differ.NEW_VALUE_KEY, "value2changed"),
-                "key3", Map.of(Differ.OLD_VALUE_KEY, "value3", Differ.NEW_VALUE_KEY, false),
-                "key4", Map.of(Differ.OLD_VALUE_KEY, "deletedValue4"),
-                "key5", Map.of(Differ.NEW_VALUE_KEY, "newValue5"),
-                "key6", Map.of(Differ.OLD_VALUE_KEY, 123, Differ.NEW_VALUE_KEY, 345)
-        ));
+        String expected  = """
+                {
+                   key1: value1
+                 - key2: value2
+                 + key2: value2changed
+                 - key3: value3
+                 + key3: false
+                 - key4: deletedValue4
+                 + key5: newValue5
+                 - key6: 123
+                 + key6: 345
+                }""";
 
-        Map<String, Map<String, Object>> result = differ.generate(map1, map2);
+        String result = differ.generate(map1, map2, Formatter.STYLISH_FORMAT);
 
         assertThat(result).isEqualTo(expected);
     }
@@ -56,18 +59,24 @@ class DifferTest {
                 "key2", Arrays.asList(1, 2, 3)
         );
 
+        Map<String, Object> nestedObject = new LinkedHashMap<>();
+        new LinkedHashMap<>();
+        nestedObject.put("nestedKey", "value");
+        nestedObject.put("isNested", true);
+
         Map<String, Object> map2 = Map.of(
-                "key1", Map.of("nestedKey", "value", "isNested", true),
+                "key1", nestedObject,
                 "key2", Arrays.asList(3, 4, 5)
         );
 
-        Map<String, Map<String, Object>> expected = new HashMap<>(Map.of(
-                "key1", Map.of(Differ.NEW_VALUE_KEY, Map.of("nestedKey", "value", "isNested", true)),
-                "key2", Map.of(Differ.OLD_VALUE_KEY, Arrays.asList(1, 2, 3),
-                        Differ.NEW_VALUE_KEY, Arrays.asList(3, 4, 5))
-        ));
+        String result = differ.generate(map1, map2, Formatter.STYLISH_FORMAT);
 
-        Map<String, Map<String, Object>> result = differ.generate(map1, map2);
+        String expected = """
+                {
+                 + key1: {nestedKey=value, isNested=true}
+                 - key2: [1, 2, 3]
+                 + key2: [3, 4, 5]
+                }""";
 
         assertThat(result).isEqualTo(expected);
     }
@@ -78,31 +87,23 @@ class DifferTest {
         map1.put("key1", null);
         map1.put("key2", null);
         map1.put("key3", "value3");
+        map1.put("key4", null);
 
         Map<String, Object> map2 = new LinkedHashMap<>();
         map2.put("key1", 123);
         map2.put("key2", null);
         map2.put("key3", null);
 
-        Map<String, Map<String, Object>> expected = new LinkedHashMap<>();
-
-        Map<String, Object> value1 = new HashMap<>();
-        value1.put(Differ.OLD_VALUE_KEY, null);
-        value1.put(Differ.NEW_VALUE_KEY, 123);
-
-        Map<String, Object> value2 = new HashMap<>();
-        value2.put(Differ.OLD_VALUE_KEY, null);
-        value2.put(Differ.NEW_VALUE_KEY, null);
-
-        Map<String, Object> value3 = new HashMap<>();
-        value3.put(Differ.OLD_VALUE_KEY, "value3");
-        value3.put(Differ.NEW_VALUE_KEY, null);
-
-        expected.put("key1", value1);
-        expected.put("key2", value2);
-        expected.put("key3", value3);
-
-        Map<String, Map<String, Object>> result = differ.generate(map1, map2);
+        String expected = """
+                {
+                 - key1: null
+                 + key1: 123
+                   key2: null
+                 - key3: value3
+                 + key3: null
+                 - key4: null
+                }""";
+        String result = differ.generate(map1, map2, Formatter.STYLISH_FORMAT);
 
         assertThat(result).isEqualTo(expected);
     }
@@ -110,24 +111,24 @@ class DifferTest {
     @Test
     void testGenerateCheckOrder() {
         Map<String, Object> map1 = Map.of(
-                "lastKey1", "value1",
-                "middleKey", "value2",
-                "firstKey1", "value3"
+                "3Key", "value1",
+                "2Key", "value2",
+                "1Key", "value3"
         );
 
         Map<String, Object> map2 = Map.of(
-                "lastKey1", "value1",
-                "middleKey", "value2",
-                "firstKey1", "value3"
+                "3Key", "value1",
+                "2Key", "value2",
+                "1Key", "value3"
         );
 
-        Map<String, Map<String, Object>> expected = new LinkedHashMap<>(Map.of(
-                "firstKey1", Map.of(Differ.OLD_VALUE_KEY, "value3", Differ.NEW_VALUE_KEY, "value3"),
-                "middleKey", Map.of(Differ.OLD_VALUE_KEY, "value2", Differ.NEW_VALUE_KEY, "value2"),
-                "lastKey1", Map.of(Differ.OLD_VALUE_KEY, "value1", Differ.NEW_VALUE_KEY, "value1")
-        ));
-
-        Map<String, Map<String, Object>> result = differ.generate(map1, map2);
+        String expected = """
+                {
+                   1Key: value3
+                   2Key: value2
+                   3Key: value1
+                }""";
+        String result = differ.generate(map1, map2, Formatter.STYLISH_FORMAT);
 
         assertThat(result).isEqualTo(expected);
     }

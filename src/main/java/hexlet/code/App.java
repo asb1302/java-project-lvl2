@@ -3,8 +3,6 @@ package hexlet.code;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import hexlet.code.formatter.FormatterInterface;
-import hexlet.code.formatter.Stylish;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Command;
@@ -37,12 +35,9 @@ public final class App implements Callable<Integer> {
     )
     private String filepath2;
 
-    private DifferInterface differ;
-    private FormatterInterface stylish;
-
+    private final DifferInterface differ;
     App() {
         this.differ = new Differ();
-        this.stylish = new Stylish();
     }
     public static void main(String... args) {
         int exitCode = new CommandLine(new App()).execute(args);
@@ -72,9 +67,9 @@ public final class App implements Callable<Integer> {
             Map<String, Object> mapFile1 = mapper1.readValue(Paths.get(this.filepath1).toFile(), type);
             Map<String, Object> mapFile2 = mapper2.readValue(Paths.get(this.filepath2).toFile(), type);
 
-            Map<String, Map<String, Object>> diff = this.differ.generate(mapFile1, mapFile2);
+            String diff = this.differ.generate(mapFile1, mapFile2, this.format);
 
-            System.out.println(this.stylish.format(diff));
+            System.out.println(diff);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

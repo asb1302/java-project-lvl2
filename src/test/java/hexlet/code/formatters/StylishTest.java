@@ -1,4 +1,4 @@
-package hexlet.code.formatter;
+package hexlet.code.formatters;
 
 import hexlet.code.Differ;
 import org.junit.jupiter.api.BeforeAll;
@@ -106,9 +106,13 @@ class StylishTest {
         value3.put(Differ.OLD_VALUE_KEY, "value3");
         value3.put(Differ.NEW_VALUE_KEY, null);
 
+        Map<String, Object> value4 = new LinkedHashMap<>();
+        value4.put(Differ.OLD_VALUE_KEY, null);
+
         diff.put("key1", value1);
         diff.put("key2", value2);
         diff.put("key3", value3);
+        diff.put("key4", value4);
 
         String result = stylish.format(diff);
         String expected = """
@@ -118,6 +122,7 @@ class StylishTest {
                    key2: null
                  - key3: value3
                  + key3: null
+                 - key4: null
                 }""";
 
         assertThat(result).isEqualTo(expected);
