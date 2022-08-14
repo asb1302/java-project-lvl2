@@ -18,7 +18,7 @@ class DifferTest {
     }
 
     @Test
-    void testGenerateSimpleValues() {
+    void testGenerateSimpleValues() throws Exception {
         Map<String, Object> map1 = Map.of(
                 "key1", "value1",
                 "key2", "value2",
@@ -54,13 +54,12 @@ class DifferTest {
     }
 
     @Test
-    void testGenerateNestedValues() {
+    void testGenerateNestedValues() throws Exception {
         Map<String, Object> map1 = Map.of(
                 "key2", Arrays.asList(1, 2, 3)
         );
 
         Map<String, Object> nestedObject = new LinkedHashMap<>();
-        new LinkedHashMap<>();
         nestedObject.put("nestedKey", "value");
         nestedObject.put("isNested", true);
 
@@ -82,7 +81,7 @@ class DifferTest {
     }
 
     @Test
-    void testGenerateNullValues() {
+    void testGenerateNullValues() throws Exception {
         Map<String, Object> map1 = new LinkedHashMap<>();
         map1.put("key1", null);
         map1.put("key2", null);
@@ -109,7 +108,7 @@ class DifferTest {
     }
 
     @Test
-    void testGenerateCheckOrder() {
+    void testGenerateCheckOrder() throws Exception {
         Map<String, Object> map1 = Map.of(
                 "3Key", "value1",
                 "2Key", "value2",

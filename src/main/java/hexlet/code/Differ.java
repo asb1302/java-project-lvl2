@@ -12,7 +12,7 @@ public final class Differ implements DifferInterface {
     public static final String NEW_VALUE_KEY = "newValue";
 
     @Override
-    public String generate(Map<String, Object> map1, Map<String, Object> map2, String format) {
+    public String generate(Map<String, Object> map1, Map<String, Object> map2, String format) throws Exception {
         Set<String> keys = new TreeSet<>(map1.keySet());
         keys.addAll(map2.keySet());
 
