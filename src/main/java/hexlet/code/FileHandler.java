@@ -31,11 +31,11 @@ public final class FileHandler implements FileHandlerInterface {
             case "json" -> {
                 return new ObjectMapper();
             }
-            case "yaml" -> {
+            case "yaml", "yml" -> {
                 return new ObjectMapper(new YAMLFactory());
             }
 
-            default -> throw new Exception("Invalid files format");
+            default -> throw new Exception("Invalid file extension");
         }
     }
 }
