@@ -53,15 +53,15 @@ class StylishTest {
         String result = stylish.format(diff);
         String expected = """
                 {
-                   key1: value1
-                 - key2: value2
-                 + key2: value2changed
-                 - key3: value3
-                 + key3: false
-                 - key4: deletedValue4
-                 + key5: newValue5
-                 - key6: 123
-                 + key6: 345
+                    key1: value1
+                  - key2: value2
+                  + key2: value2changed
+                  - key3: value3
+                  + key3: false
+                  - key4: deletedValue4
+                  + key5: newValue5
+                  - key6: 123
+                  + key6: 345
                 }""";
 
         assertThat(result).isEqualTo(expected);
@@ -82,9 +82,9 @@ class StylishTest {
         String result = stylish.format(diff);
         String expected = """
                 {
-                 + key1: {nestedKey=value, isNested=true}
-                 - key2: [1, 2, 3]
-                 + key2: [3, 4, 5]
+                  + key1: {nestedKey=value, isNested=true}
+                  - key2: [1, 2, 3]
+                  + key2: [3, 4, 5]
                 }""";
 
         assertThat(result).isEqualTo(expected);
@@ -117,12 +117,12 @@ class StylishTest {
         String result = stylish.format(diff);
         String expected = """
                 {
-                 - key1: null
-                 + key1: 123
-                   key2: null
-                 - key3: value3
-                 + key3: null
-                 - key4: null
+                  - key1: null
+                  + key1: 123
+                    key2: null
+                  - key3: value3
+                  + key3: null
+                  - key4: null
                 }""";
 
         assertThat(result).isEqualTo(expected);

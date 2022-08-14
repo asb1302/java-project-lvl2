@@ -26,17 +26,17 @@ class DifferTest {
     void testGenerate() throws Exception {
         String result = Differ.generate(filepath1, filepath2, Formatter.STYLISH_FORMAT);
 
-        String expected  = """
+        String expected = """
                 {
-                   key1: value1
-                 - key2: value2
-                 + key2: value2changed
-                 - key3: value3
-                 + key3: false
-                 - key4: deletedValue4
-                 + key5: newValue5
-                 - key6: 123
-                 + key6: 345
+                    key1: value1
+                  - key2: value2
+                  + key2: value2changed
+                  - key3: value3
+                  + key3: false
+                  - key4: deletedValue4
+                  + key5: newValue5
+                  - key6: 123
+                  + key6: 345
                 }""";
 
         assertThat(result).isEqualTo(expected);
@@ -46,17 +46,17 @@ class DifferTest {
     void testGenerateWithoutFormat() throws Exception {
         String result = Differ.generate(filepath1, filepath2);
 
-        String expected  = """
+        String expected = """
                 {
-                   key1: value1
-                 - key2: value2
-                 + key2: value2changed
-                 - key3: value3
-                 + key3: false
-                 - key4: deletedValue4
-                 + key5: newValue5
-                 - key6: 123
-                 + key6: 345
+                    key1: value1
+                  - key2: value2
+                  + key2: value2changed
+                  - key3: value3
+                  + key3: false
+                  - key4: deletedValue4
+                  + key5: newValue5
+                  - key6: 123
+                  + key6: 345
                 }""";
 
         assertThat(result).isEqualTo(expected);

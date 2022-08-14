@@ -44,7 +44,7 @@ public final class Stylish extends BaseFormatter implements FormatterInterface {
     }
 
     private String printNotChanged(String key, Object value) {
-        return "   "
+        return "    "
                 +
                 key
                 +
@@ -54,7 +54,7 @@ public final class Stylish extends BaseFormatter implements FormatterInterface {
     }
 
     private String printPlus(String key, Object value) {
-        return " + "
+        return "  + "
                 +
                 key
                 +
@@ -64,7 +64,7 @@ public final class Stylish extends BaseFormatter implements FormatterInterface {
     }
 
     private String printMinus(String key, Object value) {
-        return " - "
+        return "  - "
                 +
                 key
                 +
