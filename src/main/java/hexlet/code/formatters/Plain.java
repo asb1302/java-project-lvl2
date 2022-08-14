@@ -48,7 +48,11 @@ public final class Plain extends BaseFormatter implements FormatterInterface {
             return null;
         }
 
-        if (value instanceof String || ClassUtils.isPrimitiveWrapper(value.getClass())) {
+        if (value instanceof String) {
+            return String.format("'%s'", value);
+        }
+
+        if (ClassUtils.isPrimitiveWrapper(value.getClass())) {
             return value;
         }
 

@@ -54,10 +54,10 @@ class PlaintTest {
         String result = plain.format(diff);
 
         String expected = """
-                Property 'key2' was updated. From value2 to value2changed
-                Property 'key3' was updated. From value3 to false
+                Property 'key2' was updated. From 'value2' to 'value2changed'
+                Property 'key3' was updated. From 'value3' to false
                 Property 'key4' was removed
-                Property 'key5' was added with value: newValue5
+                Property 'key5' was added with value: 'newValue5'
                 Property 'key6' was updated. From 123 to 345""";
 
         assertThat(result).isEqualTo(expected);
@@ -112,7 +112,7 @@ class PlaintTest {
 
         String expected = """
                 Property 'key1' was updated. From null to 123
-                Property 'key3' was updated. From value3 to null
+                Property 'key3' was updated. From 'value3' to null
                 Property 'key4' was removed""";
 
         assertThat(result).isEqualTo(expected);
