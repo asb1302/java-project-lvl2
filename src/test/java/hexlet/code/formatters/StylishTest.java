@@ -10,9 +10,14 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//CHECKSTYLE:OFF: checkstyle:magicnumber
 class StylishTest {
     private static Stylish stylish;
+
+    public static final Integer EXAMPLE_INT_1 = 123;
+    public static final Integer EXAMPLE_INT_2 = 345;
+    public static final Integer EXAMPLE_INT_3 = 567;
+    public static final Integer EXAMPLE_INT_4 = 789;
+
     @BeforeAll
     public static void beforeAll() {
         stylish = new Stylish();
@@ -46,8 +51,8 @@ class StylishTest {
         diff.put("key5", key5Value);
 
         LinkedHashMap<String, Object> key6Value = new LinkedHashMap<>();
-        key6Value.put(Differ.OLD_VALUE_KEY, 123);
-        key6Value.put(Differ.NEW_VALUE_KEY, 345);
+        key6Value.put(Differ.OLD_VALUE_KEY, EXAMPLE_INT_1);
+        key6Value.put(Differ.NEW_VALUE_KEY, EXAMPLE_INT_2);
         diff.put("key6", key6Value);
 
         String result = stylish.format(diff);
@@ -76,15 +81,15 @@ class StylishTest {
         nestedObject.put("isNested", true);
 
         diff.put("key1", Map.of(Differ.NEW_VALUE_KEY, nestedObject));
-        diff.put("key2", Map.of(Differ.OLD_VALUE_KEY, Arrays.asList(1, 2, 3),
-                Differ.NEW_VALUE_KEY, Arrays.asList(3, 4, 5)));
+        diff.put("key2", Map.of(Differ.OLD_VALUE_KEY, Arrays.asList(EXAMPLE_INT_1, EXAMPLE_INT_2),
+                Differ.NEW_VALUE_KEY, Arrays.asList(EXAMPLE_INT_3, EXAMPLE_INT_4)));
 
         String result = stylish.format(diff);
         String expected = """
                 {
                   + key1: {nestedKey=value, isNested=true}
-                  - key2: [1, 2, 3]
-                  + key2: [3, 4, 5]
+                  - key2: [123, 345]
+                  + key2: [567, 789]
                 }""";
 
         assertThat(result).isEqualTo(expected);
@@ -96,7 +101,7 @@ class StylishTest {
 
         Map<String, Object> value1 = new LinkedHashMap<>();
         value1.put(Differ.OLD_VALUE_KEY, null);
-        value1.put(Differ.NEW_VALUE_KEY, 123);
+        value1.put(Differ.NEW_VALUE_KEY, EXAMPLE_INT_1);
 
         Map<String, Object> value2 = new LinkedHashMap<>();
         value2.put(Differ.OLD_VALUE_KEY, null);

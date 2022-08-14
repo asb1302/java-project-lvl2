@@ -10,13 +10,17 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//CHECKSTYLE:OFF: checkstyle:magicnumber
 class DiffMakerTest {
     private static DiffMakerInterface diffMaker;
     @BeforeAll
     public static void beforeAll() {
         diffMaker = new DiffMaker();
     }
+
+    public static final Integer EXAMPLE_INT_1 = 123;
+    public static final Integer EXAMPLE_INT_2 = 345;
+    public static final Integer EXAMPLE_INT_3 = 567;
+    public static final Integer EXAMPLE_INT_4 = 789;
 
     @Test
     void testGenerateSimpleValues() {
@@ -25,7 +29,7 @@ class DiffMakerTest {
                 "key2", "value2",
                 "key3", "value3",
                 "key4", "deletedValue4",
-                "key6", 123
+                "key6", EXAMPLE_INT_1
         );
 
         Map<String, Object> map2 = Map.of(
@@ -33,7 +37,7 @@ class DiffMakerTest {
                 "key2", "value2changed",
                 "key3", false,
                 "key5", "newValue5",
-                "key6", 345
+                "key6", EXAMPLE_INT_2
         );
 
         Map<String, Map<String, Object>> expected = new LinkedHashMap<>(Map.of(
@@ -42,7 +46,7 @@ class DiffMakerTest {
                 "key3", Map.of(Differ.OLD_VALUE_KEY, "value3", Differ.NEW_VALUE_KEY, false),
                 "key4", Map.of(Differ.OLD_VALUE_KEY, "deletedValue4"),
                 "key5", Map.of(Differ.NEW_VALUE_KEY, "newValue5"),
-                "key6", Map.of(Differ.OLD_VALUE_KEY, 123, Differ.NEW_VALUE_KEY, 345)
+                "key6", Map.of(Differ.OLD_VALUE_KEY, EXAMPLE_INT_1, Differ.NEW_VALUE_KEY, EXAMPLE_INT_2)
         ));
 
         Map<String, Map<String, Object>> result = diffMaker.make(map1, map2);
@@ -53,18 +57,18 @@ class DiffMakerTest {
     @Test
     void testGenerateNestedValues() {
         Map<String, Object> map1 = Map.of(
-                "key2", Arrays.asList(1, 2, 3)
+                "key2", Arrays.asList(EXAMPLE_INT_1, EXAMPLE_INT_2)
         );
 
         Map<String, Object> map2 = Map.of(
                 "key1", Map.of("nestedKey", "value", "isNested", true),
-                "key2", Arrays.asList(3, 4, 5)
+                "key2", Arrays.asList(EXAMPLE_INT_3, EXAMPLE_INT_4)
         );
 
         Map<String, Map<String, Object>> expected = new HashMap<>(Map.of(
                 "key1", Map.of(Differ.NEW_VALUE_KEY, Map.of("nestedKey", "value", "isNested", true)),
-                "key2", Map.of(Differ.OLD_VALUE_KEY, Arrays.asList(1, 2, 3),
-                        Differ.NEW_VALUE_KEY, Arrays.asList(3, 4, 5))
+                "key2", Map.of(Differ.OLD_VALUE_KEY, Arrays.asList(EXAMPLE_INT_1, EXAMPLE_INT_2),
+                        Differ.NEW_VALUE_KEY, Arrays.asList(EXAMPLE_INT_3, EXAMPLE_INT_4))
         ));
 
         Map<String, Map<String, Object>> result = diffMaker.make(map1, map2);
@@ -80,7 +84,7 @@ class DiffMakerTest {
         map1.put("key3", "value3");
 
         Map<String, Object> map2 = new LinkedHashMap<>();
-        map2.put("key1", 123);
+        map2.put("key1", EXAMPLE_INT_1);
         map2.put("key2", null);
         map2.put("key3", null);
         map2.put("key4", null);
@@ -89,7 +93,7 @@ class DiffMakerTest {
 
         Map<String, Object> value1 = new HashMap<>();
         value1.put(Differ.OLD_VALUE_KEY, null);
-        value1.put(Differ.NEW_VALUE_KEY, 123);
+        value1.put(Differ.NEW_VALUE_KEY, EXAMPLE_INT_1);
 
         Map<String, Object> value2 = new HashMap<>();
         value2.put(Differ.OLD_VALUE_KEY, null);

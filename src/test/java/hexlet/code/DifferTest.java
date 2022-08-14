@@ -7,11 +7,9 @@ import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//CHECKSTYLE:OFF: checkstyle:magicnumber
 class DifferTest {
     private static String filepath1;
-    private static String filepath2
-            ;
+    private static String filepath2;
     @BeforeAll
     public static void beforeAll() {
         filepath1 = getFixturePath("file3.yaml");
