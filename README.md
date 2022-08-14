@@ -20,6 +20,10 @@
 ### Flat yaml (plain):
   <img src="https://asciinema.org/a/O4k79k7Rz9bkKG1JzXX85lE7Z.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
 
+### Flat json (json):
+  <img src="https://asciinema.org/a/B7iCUwRMWCkILzuoHLBElgFrH.svg" title="" alt="asciicast" class="px-2 px-md-3 px-lg-4 px-xl-5 img-fluid" loading="lazy">
+
+
 ## Start
 
 ```sh

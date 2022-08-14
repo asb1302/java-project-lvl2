@@ -1,50 +1,45 @@
 package hexlet.code;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public final class Differ implements DifferInterface {
+/**
+ * The service for comparing two yaml/json files and displaying their differences in different formats.
+ */
+public class Differ {
     public static final String OLD_VALUE_KEY = "oldValue";
     public static final String NEW_VALUE_KEY = "newValue";
 
-    @Override
-    public String generate(Map<String, Object> map1, Map<String, Object> map2, String format) {
-        Set<String> keys = new TreeSet<>(map1.keySet());
-        keys.addAll(map2.keySet());
+    private static final FileHandlerInterface FILE_HANDLER = new FileHandler();
+    private static final DiffMakerInterface DIFF_MAKER = new DiffMaker();
 
-        Map<String, Map<String, Object>> diff = keys.stream()
-                .collect(Collectors.toMap(
-                        Function.identity(),
-                        key ->
-                                (!map1.containsKey(key) ? createDiffMap(NEW_VALUE_KEY, map2.get(key))
-                                        :
-                                        !map2.containsKey(key) ? createDiffMap(OLD_VALUE_KEY, map1.get(key))
-                                                :
-                                                createDiffMap(OLD_VALUE_KEY, map1.get(key),
-                                                        NEW_VALUE_KEY, map2.get(key))
-                                ),
-                        (k1, k2) -> k1, LinkedHashMap::new)
-                );
+    /**
+     * Method for generating and displaying differences.
+     *
+     * @param filepath1 path to first file
+     * @param filepath2 path to second file
+     * @param format format of output result
+     *
+     * @return string result with difference
+     */
+    public static String generate(String filepath1, String filepath2, String format) throws Exception {
+        Map<String, Object> map1 = FILE_HANDLER.handle(filepath1);
+        Map<String, Object> map2 = FILE_HANDLER.handle(filepath2);
 
-        return Formatter.getFormatter(format).format(diff);
+        return Formatter.getFormatter(format).format(DIFF_MAKER.make(map1, map2));
     }
 
-    private Map<String, Object> createDiffMap(String key, Object value) {
-        Map<String, Object> diffMap = new LinkedHashMap<>();
-        diffMap.put(key, value);
+    /**
+     * Method for generating and displaying differences.
+     *
+     * @param filepath1 path to first file
+     * @param filepath2 path to second file
+     *
+     * @return string result with difference
+     */
+    public static String generate(String filepath1, String filepath2) throws Exception {
+        Map<String, Object> map1 = FILE_HANDLER.handle(filepath1);
+        Map<String, Object> map2 = FILE_HANDLER.handle(filepath2);
 
-        return diffMap;
-    }
-
-    private Map<String, Object> createDiffMap(String key1, Object value1, String key2, Object value2) {
-        Map<String, Object> diffMap = new LinkedHashMap<>();
-        diffMap.put(key1, value1);
-        diffMap.put(key2, value2);
-
-        return diffMap;
+        return Formatter.getFormatter(Formatter.STYLISH_FORMAT).format(DIFF_MAKER.make(map1, map2));
     }
 }
