@@ -5,7 +5,7 @@ import hexlet.code.Differ;
 import java.util.Map;
 
 public abstract class Formatter {
-    abstract public String format(Map<String, Map<String, Object>> diffMap) throws Exception;
+    public abstract String format(Map<String, Map<String, Object>> diffMap) throws Exception;
 
     /**
      * Define, that property was not changed.

@@ -8,8 +8,7 @@ import java.util.Map;
 public class Differ {
     public static final String OLD_VALUE_KEY = "oldValue";
     public static final String NEW_VALUE_KEY = "newValue";
-
-    private static final FileHandler FILE_HANDLER = new FileHandlerImp();
+    public static final ContentHandler CONTENT_HANDLER = new ContentHandlerImp();
     private static final DiffMaker DIFF_MAKER = new DiffMakerImp();
 
     /**
@@ -22,8 +21,15 @@ public class Differ {
      * @return string result with difference
      */
     public static String generate(String filepath1, String filepath2, String format) throws Exception {
-        Map<String, Object> map1 = FILE_HANDLER.handle(filepath1);
-        Map<String, Object> map2 = FILE_HANDLER.handle(filepath2);
+        Map<String, Object> map1 = CONTENT_HANDLER.handle(
+            FileHandler.getContent(filepath1),
+            FileHandler.getExtension(filepath1)
+        );
+
+        Map<String, Object> map2 = CONTENT_HANDLER.handle(
+            FileHandler.getContent(filepath2),
+            FileHandler.getExtension(filepath2)
+        );
 
         return FormatterFactory.getFormatter(format).format(DIFF_MAKER.make(map1, map2));
     }
@@ -37,8 +43,15 @@ public class Differ {
      * @return string result with difference
      */
     public static String generate(String filepath1, String filepath2) throws Exception {
-        Map<String, Object> map1 = FILE_HANDLER.handle(filepath1);
-        Map<String, Object> map2 = FILE_HANDLER.handle(filepath2);
+        Map<String, Object> map1 = CONTENT_HANDLER.handle(
+                FileHandler.getContent(filepath1),
+                FileHandler.getExtension(filepath1)
+        );
+
+        Map<String, Object> map2 = CONTENT_HANDLER.handle(
+                FileHandler.getContent(filepath2),
+                FileHandler.getExtension(filepath2)
+        );
 
         return FormatterFactory.getFormatter(FormatterFactory.STYLISH_FORMAT).format(DIFF_MAKER.make(map1, map2));
     }
