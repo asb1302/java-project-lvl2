@@ -2,6 +2,6 @@ package hexlet.code.formatters;
 
 import java.util.Map;
 
-public interface FormatterInterface {
+public interface Formatter {
     String format(Map<String, Map<String, Object>> diffMap) throws Exception;
 }

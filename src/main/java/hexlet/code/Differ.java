@@ -9,8 +9,8 @@ public class Differ {
     public static final String OLD_VALUE_KEY = "oldValue";
     public static final String NEW_VALUE_KEY = "newValue";
 
-    private static final FileHandlerInterface FILE_HANDLER = new FileHandler();
-    private static final DiffMakerInterface DIFF_MAKER = new DiffMaker();
+    private static final FileHandler FILE_HANDLER = new FileHandlerImp();
+    private static final DiffMaker DIFF_MAKER = new DiffMakerImp();
 
     /**
      * Method for generating and displaying differences.
@@ -25,7 +25,7 @@ public class Differ {
         Map<String, Object> map1 = FILE_HANDLER.handle(filepath1);
         Map<String, Object> map2 = FILE_HANDLER.handle(filepath2);
 
-        return Formatter.getFormatter(format).format(DIFF_MAKER.make(map1, map2));
+        return FormatterFactory.getFormatter(format).format(DIFF_MAKER.make(map1, map2));
     }
 
     /**
@@ -40,6 +40,6 @@ public class Differ {
         Map<String, Object> map1 = FILE_HANDLER.handle(filepath1);
         Map<String, Object> map2 = FILE_HANDLER.handle(filepath2);
 
-        return Formatter.getFormatter(Formatter.STYLISH_FORMAT).format(DIFF_MAKER.make(map1, map2));
+        return FormatterFactory.getFormatter(FormatterFactory.STYLISH_FORMAT).format(DIFF_MAKER.make(map1, map2));
     }
 }

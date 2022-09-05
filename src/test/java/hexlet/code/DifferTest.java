@@ -22,7 +22,7 @@ class DifferTest {
 
     @Test
     void testGenerate() throws Exception {
-        String result = Differ.generate(filepath1, filepath2, Formatter.STYLISH_FORMAT);
+        String result = Differ.generate(filepath1, filepath2, FormatterFactory.STYLISH_FORMAT);
 
         String expected = """
                 {

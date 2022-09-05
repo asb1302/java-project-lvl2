@@ -5,7 +5,7 @@ import org.apache.commons.lang3.ClassUtils;
 
 import java.util.Map;
 
-public final class Plain extends BaseFormatter implements FormatterInterface {
+public final class Plain extends BaseFormatter implements Formatter {
 
     @Override
     public String format(Map<String, Map<String, Object>> diffMap) {

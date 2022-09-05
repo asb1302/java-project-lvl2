@@ -4,7 +4,7 @@ import hexlet.code.Differ;
 
 import java.util.Map;
 
-public final class Stylish extends BaseFormatter implements FormatterInterface {
+public final class Stylish extends BaseFormatter implements Formatter {
     @Override
     public String format(Map<String, Map<String, Object>> diffMap) {
         boolean first = true;

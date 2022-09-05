@@ -16,7 +16,7 @@ class FileHandlerTest {
 
     private static Map<String, Object> parseExpectedResult;
 
-    private static FileHandlerInterface fileHandler;
+    private static FileHandler fileHandler;
 
     public static final Integer EXAMPLE_INT_1 = 300;
     public static final Integer EXAMPLE_INT_2 = 1;
@@ -33,7 +33,7 @@ class FileHandlerTest {
         jsonFilePath = getFixturePath("file1.json");
         yamlFilePath = getFixturePath("file2.yaml");
 
-        fileHandler = new FileHandler();
+        fileHandler = new FileHandlerImp();
 
         parseExpectedResult = new LinkedHashMap<>();
         parseExpectedResult.put("setting1", "Another value");
