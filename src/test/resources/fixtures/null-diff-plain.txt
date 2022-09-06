@@ -1,0 +1,3 @@
+Property 'key1' was updated. From null to 123
+Property 'key3' was updated. From 'value3' to null
+Property 'key4' was removed

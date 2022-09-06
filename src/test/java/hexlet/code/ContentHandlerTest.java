@@ -3,7 +3,6 @@ package hexlet.code;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -12,10 +11,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ContentHandlerTest {
-    private static String jsonContent;
-    private static String yamlContent;
-
+class ContentHandlerTest extends TestCase {
     private static Map<String, Object> parseExpectedResult;
 
     private static ContentHandler contentHandler;
@@ -31,10 +27,7 @@ class ContentHandlerTest {
     public static final Integer EXAMPLE_INT_9 = 55;
 
     @BeforeAll
-    public static void beforeAll() throws IOException {
-        jsonContent = Files.readString(Paths.get(getFixturePath("file1.json")));
-        yamlContent = Files.readString(Paths.get(getFixturePath("file2.yaml")));
-
+    public static void beforeAll() {
         contentHandler = new ContentHandlerImp();
 
         parseExpectedResult = new LinkedHashMap<>();
@@ -64,20 +57,16 @@ class ContentHandlerTest {
         parseExpectedResult.put("obj1", nestedObject);
     }
 
-    private static String getFixturePath(String fileName) {
-        return Paths.get("src", "test", "resources", "fixtures", fileName).toAbsolutePath().toString();
-    }
-
     @Test
     void testHandleJson() throws Exception {
-        Map<String, Object> result = contentHandler.handle(jsonContent, "json");
+        Map<String, Object> result = contentHandler.handle(Files.readString(Paths.get(JSON_1_PATH)), "json");
 
         assertThat(result).isEqualTo(parseExpectedResult);
     }
 
     @Test
     void testHandleYaml() throws Exception {
-        Map<String, Object> result = contentHandler.handle(yamlContent, "yaml");
+        Map<String, Object> result = contentHandler.handle(Files.readString(Paths.get(YAML_2_PATH)), "yaml");
 
         assertThat(result).isEqualTo(parseExpectedResult);
     }

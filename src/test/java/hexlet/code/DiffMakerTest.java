@@ -10,17 +10,12 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DiffMakerTest {
+class DiffMakerTest extends TestCase {
     private static DiffMaker diffMaker;
     @BeforeAll
     public static void beforeAll() {
         diffMaker = new DiffMakerImp();
     }
-
-    public static final Integer EXAMPLE_INT_1 = 123;
-    public static final Integer EXAMPLE_INT_2 = 345;
-    public static final Integer EXAMPLE_INT_3 = 567;
-    public static final Integer EXAMPLE_INT_4 = 789;
 
     @Test
     void testGenerateSimpleValues() {
