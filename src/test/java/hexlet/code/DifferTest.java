@@ -10,16 +10,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DifferTest extends TestCase {
     @Test
     void testGenerate() throws Exception {
-        String result = Differ.generate(YAML_3_PATH, YAML_4_PATH, FormatterFactory.STYLISH_FORMAT);
-        String expected = Files.readString(Paths.get(getFixturePath("file3-file4-diff-stylish.txt")));
+        String result = Differ.generate(BEFORE_JSON, BEFORE_YAML, FormatterFactory.STYLISH_FORMAT);
+        String expected = Files.readString(Paths.get(getFixturePath("json-yaml-after.txt")));
 
         assertThat(result).isEqualTo(expected);
     }
 
     @Test
     void testGenerateWithoutFormat() throws Exception {
-        String result = Differ.generate(YAML_3_PATH, YAML_4_PATH);
-        String expected = Files.readString(Paths.get(getFixturePath("file3-file4-diff-stylish.txt")));
+        String result = Differ.generate(BEFORE_YAML, BEFORE_JSON);
+        String expected = Files.readString(Paths.get(getFixturePath("yaml-json-after.txt")));
 
         assertThat(result).isEqualTo(expected);
     }
