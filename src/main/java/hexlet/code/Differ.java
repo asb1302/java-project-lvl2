@@ -21,17 +21,17 @@ public class Differ {
      * @return string result with difference
      */
     public static String generate(String filepath1, String filepath2, String format) throws Exception {
-        Map<String, Object> map1 = CONTENT_HANDLER.handle(
+        Map<String, Object> content1 = CONTENT_HANDLER.handle(
             FileHandler.getContent(filepath1),
             FileHandler.getExtension(filepath1)
         );
 
-        Map<String, Object> map2 = CONTENT_HANDLER.handle(
+        Map<String, Object> content2 = CONTENT_HANDLER.handle(
             FileHandler.getContent(filepath2),
             FileHandler.getExtension(filepath2)
         );
 
-        return FormatterFactory.getFormatter(format).format(DIFF_MAKER.make(map1, map2));
+        return FormatterFactory.getFormatter(format).format(DIFF_MAKER.make(content1, content2));
     }
 
     /**
@@ -43,16 +43,6 @@ public class Differ {
      * @return string result with difference
      */
     public static String generate(String filepath1, String filepath2) throws Exception {
-        Map<String, Object> map1 = CONTENT_HANDLER.handle(
-                FileHandler.getContent(filepath1),
-                FileHandler.getExtension(filepath1)
-        );
-
-        Map<String, Object> map2 = CONTENT_HANDLER.handle(
-                FileHandler.getContent(filepath2),
-                FileHandler.getExtension(filepath2)
-        );
-
-        return FormatterFactory.getFormatter(FormatterFactory.STYLISH_FORMAT).format(DIFF_MAKER.make(map1, map2));
+        return Differ.generate(filepath1, filepath2, FormatterFactory.STYLISH_FORMAT);
     }
 }

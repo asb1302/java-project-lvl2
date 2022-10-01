@@ -1,2 +1,0 @@
-Property 'key1' was added with value: [complex value]
-Property 'key2' was updated. From [complex value] to [complex value]

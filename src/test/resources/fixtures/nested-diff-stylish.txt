@@ -1,5 +1,0 @@
-{
-  + key1: {nestedKey=value, isNested=true}
-  - key2: [123, 345]
-  + key2: [567, 789]
-}
