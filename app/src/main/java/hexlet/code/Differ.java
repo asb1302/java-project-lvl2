@@ -6,8 +6,6 @@ import java.util.Map;
  * The service for comparing two yaml/json files and displaying their differences in different formats.
  */
 public class Differ {
-    public static final String OLD_VALUE_KEY = "oldValue";
-    public static final String NEW_VALUE_KEY = "newValue";
     public static final ContentHandler CONTENT_HANDLER = new ContentHandlerImp();
     private static final DiffMaker DIFF_MAKER = new DiffMakerImp();
 

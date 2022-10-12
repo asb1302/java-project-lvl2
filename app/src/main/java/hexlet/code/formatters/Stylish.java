@@ -1,40 +1,41 @@
 package hexlet.code.formatters;
 
-import hexlet.code.Differ;
+import hexlet.code.DiffMaker;
+import hexlet.code.Node;
 
 import java.util.Map;
 
 public final class Stylish extends Formatter {
     @Override
-    public String format(Map<String, Map<String, Object>> diffMap) {
+    public String format(Map<String, Node> diff) {
         boolean first = true;
 
         StringBuilder builder = new StringBuilder();
 
         builder.append("{\n");
-        for (Map.Entry<String, Map<String, Object>> entry : diffMap.entrySet()) {
+        for (Map.Entry<String, Node> entry : diff.entrySet()) {
             if (first) {
                 first = false;
             } else {
                 builder.append("\n");
             }
 
-            Map<String, Object> diff = entry.getValue();
+            Node node = entry.getValue();
 
-            if (isNotChangedProperty(diff)) {
-                builder
-                        .append(printNotChanged(entry.getKey(), diff.get(Differ.OLD_VALUE_KEY)));
-            } else if (isUpdatedProperty(diff)) {
-                builder
-                        .append(printMinus(entry.getKey(), diff.get(Differ.OLD_VALUE_KEY)))
+            switch (node.getState()) {
+                case DiffMaker.NOT_CHANGED_STATE -> builder
+                        .append(printNotChanged(entry.getKey(), node.getOldValue()));
+                case DiffMaker.CHANGED_STATE -> builder
+                        .append(printMinus(entry.getKey(), node.getOldValue()))
                         .append("\n")
-                        .append(printPlus(entry.getKey(), diff.get(Differ.NEW_VALUE_KEY)));
-            } else if (isAddedProperty(diff)) {
-                builder
-                        .append(printPlus(entry.getKey(), diff.get(Differ.NEW_VALUE_KEY)));
-            } else if (isRemovedProperty(diff)) {
-                builder
-                        .append(printMinus(entry.getKey(), diff.get(Differ.OLD_VALUE_KEY)));
+                        .append(printPlus(entry.getKey(), node.getNewValue()));
+                case DiffMaker.NEW_STATE -> builder
+                        .append(printPlus(entry.getKey(), node.getNewValue()));
+                case DiffMaker.DELETED_STATE -> builder
+                        .append(printMinus(entry.getKey(), node.getOldValue()));
+                default -> {
+                    continue;
+                }
             }
         }
 

@@ -1,6 +1,7 @@
 package hexlet.code.formatters;
 
-import hexlet.code.Differ;
+import hexlet.code.DiffMaker;
+import hexlet.code.Node;
 import org.apache.commons.lang3.ClassUtils;
 
 import java.util.Map;
@@ -8,33 +9,37 @@ import java.util.Map;
 public final class Plain extends Formatter {
 
     @Override
-    public String format(Map<String, Map<String, Object>> diffMap) {
+    public String format(Map<String, Node> diff) {
         StringBuilder builder = new StringBuilder();
 
-        for (Map.Entry<String, Map<String, Object>> entry : diffMap.entrySet()) {
-            Map<String, Object> diff = entry.getValue();
+        for (Map.Entry<String, Node> entry : diff.entrySet()) {
+            Node node = entry.getValue();
 
-            if (!isNotChangedProperty(diff) && isUpdatedProperty(diff)) {
-                builder.append(
-                        printUpdated(
-                                entry.getKey(),
-                                prepareValue(diff.get(Differ.OLD_VALUE_KEY)),
-                                prepareValue(diff.get(Differ.NEW_VALUE_KEY))
-                        )
-                );
-            } else if (isAddedProperty(diff)) {
-                builder.append(
-                        printAdded(
-                                entry.getKey(),
-                                prepareValue(diff.get(Differ.NEW_VALUE_KEY))
-                        )
-                );
-            } else if (isRemovedProperty(diff)) {
-                builder.append(
-                        printRemoved(entry.getKey())
-                );
-            } else {
-                continue;
+            switch (node.getState()) {
+                case DiffMaker.CHANGED_STATE:
+                    builder.append(
+                            printUpdated(
+                                    entry.getKey(),
+                                    prepareValue(node.getOldValue()),
+                                    prepareValue(node.getNewValue())
+                            )
+                    );
+                    break;
+                case DiffMaker.NEW_STATE:
+                    builder.append(
+                            printAdded(
+                                    entry.getKey(),
+                                    prepareValue(node.getNewValue())
+                            )
+                    );
+                    break;
+                case DiffMaker.DELETED_STATE:
+                    builder.append(
+                            printRemoved(entry.getKey())
+                    );
+                    break;
+                default:
+                    continue;
             }
 
             builder.append("\n");
